@@ -1,10 +1,13 @@
 import { ChakraProvider } from '@chakra-ui/react'
 import { AppRouter } from './routes'
+import AppContextProvider from './contexts/AppContext'
 
 const App = () => {
     return (
         <ChakraProvider>
-            <AppRouter />
+            <AppContextProvider>
+                <AppRouter />
+            </AppContextProvider>
         </ChakraProvider>
     )
 }
