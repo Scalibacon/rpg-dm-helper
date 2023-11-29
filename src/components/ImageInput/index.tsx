@@ -1,4 +1,4 @@
-import { Box, FormControl, FormLabel, HStack, Image, InputProps } from '@chakra-ui/react'
+import { Box, FormControl, FormLabel, HStack, Image, InputProps, useToast } from '@chakra-ui/react'
 import { useField } from 'formik'
 import { useCallback, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
@@ -8,19 +8,34 @@ import { fileToBase64 } from '@/utils/fileUtils'
 interface ImageInputProps extends InputProps {
     label?: string
     name: string
+    maxSize?: number,
 }
+
+const MAX_SIZE = 250 * 1000
 
 const ImageInput = ({
     label,
     multiple = false,
     height = '100px',
     name,
+    maxSize = MAX_SIZE,
     //   ...props
 }: ImageInputProps) => {
     const [imagePathes, setImagePathes] = useState<string[]>([])
     const [field, meta, fieldHelpers] = useField<File[]>(name)
+    const toast = useToast()
 
     const loadFilePreview = useCallback(async (file: File) => {
+        if (file.size > MAX_SIZE) {
+            toast({
+                title: `Error uploading image`,
+                description: `File exceeds max size (${maxSize} bytes)`,
+                status: 'error',
+                isClosable: true,
+            })
+            return
+        }
+
         try {
             const base64 = await fileToBase64(file)
             if (typeof base64 !== 'string') return
@@ -37,7 +52,7 @@ const ImageInput = ({
             if (error instanceof Error)
                 console.log('Error trying to show image: ', error.message)
         }
-    }, [field.value, fieldHelpers, multiple])
+    }, [field.value, fieldHelpers, multiple, maxSize, toast])
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
         acceptedFiles.forEach(loadFilePreview)
