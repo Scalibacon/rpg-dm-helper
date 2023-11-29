@@ -1,6 +1,6 @@
 import { Box, FormControl, FormLabel, HStack, Image, InputProps } from '@chakra-ui/react'
 import { useField } from 'formik'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { Trash } from 'iconsax-react'
 import { fileToBase64 } from '@/utils/fileUtils'
@@ -20,26 +20,28 @@ const ImageInput = ({
     const [imagePathes, setImagePathes] = useState<string[]>([])
     const [field, meta, fieldHelpers] = useField<File[]>(name)
 
-    const onDrop = useCallback((acceptedFiles: File[]) => {
-        acceptedFiles.forEach(async acceptedFile => {
-            try {
-                const base64 = await fileToBase64(acceptedFile)
-                if (typeof base64 !== 'string') return
+    const loadFilePreview = useCallback(async (file: File) => {
+        try {
+            const base64 = await fileToBase64(file)
+            if (typeof base64 !== 'string') return
 
-                if (multiple) {
-                    fieldHelpers.setValue(field.value.concat(acceptedFile))
-                    setImagePathes(prev => [...prev, base64])
-                } else {
-                    fieldHelpers.setValue([acceptedFile])
-                    setImagePathes([base64])
-                }
-
-            } catch (error) {
-                if (error instanceof Error)
-                    console.log('Error trying to upload image: ', error.message)
+            if (multiple) {
+                fieldHelpers.setValue(field.value.concat(file))
+                setImagePathes(prev => [...prev, base64])
+            } else {
+                fieldHelpers.setValue([file])
+                setImagePathes([base64])
             }
-        })
+
+        } catch (error) {
+            if (error instanceof Error)
+                console.log('Error trying to show image: ', error.message)
+        }
     }, [field.value, fieldHelpers, multiple])
+
+    const onDrop = useCallback((acceptedFiles: File[]) => {
+        acceptedFiles.forEach(loadFilePreview)
+    }, [loadFilePreview])
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
@@ -48,6 +50,11 @@ const ImageInput = ({
             'image/*': ['.jpeg', '.png', '.jpg'],
         }
     })
+
+    useEffect(() => {
+        if (field.value) loadFilePreview(field.value[0])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
         <FormControl
@@ -64,7 +71,7 @@ const ImageInput = ({
                 alignItems={'center'}
                 justifyContent='center'
             >
-                <input {...getInputProps()} id={name} name={name}/>
+                <input {...getInputProps()} id={name} name={name} />
                 {
                     isDragActive
                         ? <p>Drop the image here...</p>

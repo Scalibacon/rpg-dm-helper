@@ -22,11 +22,11 @@ import {
     useDisclosure
 } from "@chakra-ui/react"
 import { Formik } from "formik"
-import { useContext } from "react"
+import { useContext, useEffect, useState } from "react"
 import TextInput from "../TextInput"
 import { Char } from "@/types/Char.type"
 import { ImageInput } from "../ImageInput"
-import { fileToBase64 } from "@/utils/fileUtils"
+import { dataUrlToFile, fileToBase64 } from "@/utils/fileUtils"
 
 interface ModalManageCharProps {
     context: 'create' | 'edit'
@@ -41,6 +41,20 @@ const ModalManageChar = ({
 }: ModalManageCharProps) => {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const { appState, appDispatch } = useContext(AppContext)
+    const [imageFile, setImageFile] = useState<File | undefined>()
+
+    useEffect(() => {
+        async function convertToFile() {
+            if (!char || !char.charImage) return
+
+            console.log('base64', char.charImage)
+            const file = await dataUrlToFile(char.charImage, 'filename')
+            setImageFile(file)
+            console.log('file', file)
+        }
+
+        convertToFile()
+    }, [char])
 
     return (
         <>
@@ -58,16 +72,24 @@ const ModalManageChar = ({
                 <ModalOverlay />
                 <ModalContent width='auto' maxWidth={'85vw'}>
                     <Formik
-                        initialValues={{
-                            characterName: '',
-                            playerName: '',
-                            charImage: [],
-                        }}
+                        initialValues={
+                            char ? {
+                                ...char,
+                                charImage: imageFile
+                                    ? [imageFile]
+                                    : []
+                            } : {
+                                characterName: '',
+                                playerName: '',
+                                charImage: [],
+                            }}
                         onSubmit={async (values) => {
                             if (context === 'create') {
                                 console.log('values', values)
 
-                                const imageToBase64 = await fileToBase64(values.charImage[0])
+                                const imageToBase64 = values.charImage[0]
+                                    ? await fileToBase64(values.charImage[0])
+                                    : undefined
 
                                 appDispatch({
                                     type: AppActionKind.ADD_CHAR,
