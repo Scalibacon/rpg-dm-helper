@@ -1,6 +1,11 @@
 export type Char = {
     id: number,
-    name: string,
+
+    // lore
+    characterName: string,
+    playerName: string,
+
+
     coordinates: {
         x: number,
         y: number
