@@ -18,13 +18,22 @@ export interface AppState {
     chars: Char[]
 }
 
-export const initialState: AppState = {
-    chars: [
-        {characterName: 'charname', playerName: 'playname', id: 128181771, coordinates: { x: 0, y: 0}}
-    ],
+const saveStateInStorage = (state: AppState) => {
+    const stateString = JSON.stringify(state)
+    localStorage.setItem('appState', stateString)
 }
 
-// [to-do] save state in local storage or somewhere else
+const readStateFromStorage = () => {
+    const stateString = localStorage.getItem('appState')
+    const state = stateString ? JSON.parse(stateString) as AppState : undefined
+
+    return state
+}
+
+export const initialState: AppState = readStateFromStorage() || {
+    chars: [],
+}
+
 const appReducer = (state: AppState, action: AppReducerAction): AppState => {
     const { type, payload } = action
 
@@ -32,6 +41,7 @@ const appReducer = (state: AppState, action: AppReducerAction): AppState => {
         switch (type) {
             case AppActionKind.ADD_CHAR:
                 draft.chars.push(payload.char)
+                saveStateInStorage(draft)
                 break;
         }
     })

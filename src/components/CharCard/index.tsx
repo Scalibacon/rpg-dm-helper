@@ -24,7 +24,7 @@ const CharCard = ({
             border={'solid 1px turquoise'}
         >
             <GridItem rowSpan={3}>
-                <Image src='' width='75px' height='75px' bg='cyan' />
+                <Image src={char.charImage} width='75px' height='75px' bg='cyan' />
             </GridItem>
             <GridItem
                 whiteSpace='nowrap'

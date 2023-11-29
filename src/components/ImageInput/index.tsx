@@ -63,9 +63,8 @@ const ImageInput = ({
                 display='flex'
                 alignItems={'center'}
                 justifyContent='center'
-            // bg='pink'
             >
-                <input {...getInputProps()} id={name} />
+                <input {...getInputProps()} id={name} name={name}/>
                 {
                     isDragActive
                         ? <p>Drop the image here...</p>
