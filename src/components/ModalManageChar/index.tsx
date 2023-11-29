@@ -24,14 +24,17 @@ import {
 import { Formik } from "formik"
 import { useContext } from "react"
 import TextInput from "../TextInput"
+import { Char } from "@/types/Char.type"
 
 interface ModalManageCharProps {
     context: 'create' | 'edit'
+    char?: Char
     triggerButton?: JSX.Element
 }
 
 const ModalManageChar = ({
     context,
+    char,
     triggerButton,
 }: ModalManageCharProps) => {
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -63,45 +66,45 @@ const ModalManageChar = ({
                                     type: AppActionKind.ADD_CHAR,
                                     payload: {
                                         char: {
-                                            id: 1,
-                                            characterName: values.characterName,
-                                            playerName: values.playerName,
+                                            ...values,
+                                            id: Date.now(),
                                             coordinates: { x: 0, y: 0 },
                                         }
                                     }
                                 })
                             }
+                            onClose()
                         }}
                     >
                         {(formikProps) => (
                             <>
-                                <ModalHeader textTransform={'capitalize'} bg='red'>
+                                <ModalHeader textTransform={'capitalize'}>
                                     Manage char
                                 </ModalHeader>
                                 <ModalCloseButton />
-                                <ModalBody pb={6}>
+                                <ModalBody paddingY='1' paddingX={'4'}>
+                                    <Tabs variant={'enclosed'}>
+                                        <TabList>
+                                            <Tab>Lore</Tab>
+                                            <Tab>Skills</Tab>
+                                            <Tab>Talents</Tab>
+                                            <Tab>Inventory</Tab>
+                                            <Tab>Notes</Tab>
+                                        </TabList>
+                                        <TabPanels>
+                                            <TabPanel width={'700px'}>
+                                                <Grid>
+                                                    <TextInput name="characterName" label="Character name" />
+                                                    <TextInput name="playerName" label="Player name" />
+                                                </Grid>
+                                            </TabPanel>
+                                            <TabPanel width={'700px'}>
 
+                                            </TabPanel>
+                                        </TabPanels>
+                                    </Tabs>
                                 </ModalBody>
-                                <Tabs variant={'enclosed'}>
-                                    <TabList>
-                                        <Tab>Lore</Tab>
-                                        <Tab>Skills</Tab>
-                                        <Tab>Talents</Tab>
-                                        <Tab>Inventory</Tab>
-                                        <Tab>Notes</Tab>
-                                    </TabList>
-                                    <TabPanels>
-                                        <TabPanel width={'1000px'}>
-                                            <Grid>
-                                                <TextInput name="characterName" label="Character name" />
-                                                <TextInput name="playerName" label="Player name" />
-                                            </Grid>
-                                        </TabPanel>
-                                        <TabPanel width={'700px'}>
 
-                                        </TabPanel>
-                                    </TabPanels>
-                                </Tabs>
                                 <ModalFooter>
                                     <Button
                                         colorScheme='blue'

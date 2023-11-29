@@ -19,7 +19,9 @@ export interface AppState {
 }
 
 export const initialState: AppState = {
-    chars: [],
+    chars: [
+        {characterName: 'charname', playerName: 'playname', id: 128181771, coordinates: { x: 0, y: 0}}
+    ],
 }
 
 // [to-do] save state in local storage or somewhere else

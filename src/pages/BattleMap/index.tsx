@@ -1,8 +1,9 @@
+import { CharCard } from "@/components/CharCard"
 import { ModalManageChar } from "@/components/ModalManageChar"
 import { AppContext } from "@/contexts/AppContext"
 import {
     Button,
-    Flex,   
+    Flex,
     Tab,
     TabList,
     TabPanel,
@@ -49,6 +50,12 @@ const BattleMap = () => {
                                         </Button>
                                     }
                                 />
+
+                                {appState.chars.map((char, index) => {
+                                    return (
+                                        <CharCard key={index} char={char}/>
+                                    )
+                                })}
                             </VStack>
                         </TabPanel>
                         <TabPanel>
