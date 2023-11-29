@@ -25,6 +25,8 @@ import { Formik } from "formik"
 import { useContext } from "react"
 import TextInput from "../TextInput"
 import { Char } from "@/types/Char.type"
+import { ImageInput } from "../ImageInput"
+import { fileToBase64 } from "@/utils/fileUtils"
 
 interface ModalManageCharProps {
     context: 'create' | 'edit'
@@ -59,14 +61,22 @@ const ModalManageChar = ({
                         initialValues={{
                             characterName: '',
                             playerName: '',
+                            charImage: [],
                         }}
-                        onSubmit={(values) => {
+                        onSubmit={async (values) => {
                             if (context === 'create') {
+                                console.log('values', values)
+
+                                const imageToBase64 = await fileToBase64(values.charImage[0])
+
                                 appDispatch({
                                     type: AppActionKind.ADD_CHAR,
                                     payload: {
                                         char: {
                                             ...values,
+                                            charImage: typeof imageToBase64 === 'string'
+                                                ? imageToBase64
+                                                : undefined,
                                             id: Date.now(),
                                             coordinates: { x: 0, y: 0 },
                                         }
@@ -96,6 +106,7 @@ const ModalManageChar = ({
                                                 <Grid>
                                                     <TextInput name="characterName" label="Character name" />
                                                     <TextInput name="playerName" label="Player name" />
+                                                    <ImageInput name="charImage" label="Character image" />
                                                 </Grid>
                                             </TabPanel>
                                             <TabPanel width={'700px'}>
