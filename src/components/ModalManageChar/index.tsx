@@ -47,10 +47,8 @@ const ModalManageChar = ({
         async function convertToFile() {
             if (!char || !char.charImage) return
 
-            console.log('base64', char.charImage)
             const file = await dataUrlToFile(char.charImage, 'filename')
             setImageFile(file)
-            console.log('file', file)
         }
 
         convertToFile()
@@ -79,18 +77,18 @@ const ModalManageChar = ({
                                     ? [imageFile]
                                     : []
                             } : {
+                                id: 0,
                                 characterName: '',
                                 playerName: '',
                                 charImage: [],
                             }}
                         onSubmit={async (values) => {
+                            console.log('values', values)
+                            const imageToBase64 = values.charImage[0]
+                                ? await fileToBase64(values.charImage[0])
+                                : undefined
+
                             if (context === 'create') {
-                                console.log('values', values)
-
-                                const imageToBase64 = values.charImage[0]
-                                    ? await fileToBase64(values.charImage[0])
-                                    : undefined
-
                                 appDispatch({
                                     type: AppActionKind.ADD_CHAR,
                                     payload: {
@@ -100,7 +98,20 @@ const ModalManageChar = ({
                                                 ? imageToBase64
                                                 : undefined,
                                             id: Date.now(),
-                                            coordinates: { x: 0, y: 0 },
+                                        }
+                                    }
+                                })
+                            }
+
+                            if (context === 'edit') {
+                                appDispatch({
+                                    type: AppActionKind.UPDATE_CHAR,
+                                    payload: {
+                                        char: {
+                                            ...values,
+                                            charImage: typeof imageToBase64 === 'string'
+                                                ? imageToBase64
+                                                : undefined,
                                         }
                                     }
                                 })

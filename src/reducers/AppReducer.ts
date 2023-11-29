@@ -38,11 +38,15 @@ const appReducer = (state: AppState, action: AppReducerAction): AppState => {
     const { type, payload } = action
 
     return produce(state, (draft) => {
-        switch (type) {
-            case AppActionKind.ADD_CHAR:
-                draft.chars.push(payload.char)
-                saveStateInStorage(draft)
-                break;
+        if (type === AppActionKind.ADD_CHAR) {
+            draft.chars.push(payload.char)
+            saveStateInStorage(draft)
+        } else if (type === AppActionKind.UPDATE_CHAR) {
+            const index = draft.chars.findIndex(char => char.id === payload.char.id)
+            if (index < 0) return
+            draft.chars[index] = payload.char
+
+            saveStateInStorage(draft)
         }
     })
 }

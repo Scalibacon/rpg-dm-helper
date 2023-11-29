@@ -52,7 +52,7 @@ const ImageInput = ({
     })
 
     useEffect(() => {
-        if (field.value) loadFilePreview(field.value[0])
+        if (field.value && field.value.length > 0) loadFilePreview(field.value[0])
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 

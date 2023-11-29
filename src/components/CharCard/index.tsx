@@ -41,7 +41,7 @@ const CharCard = ({
                 justifyContent={'flex-end'}
             >
                 <ModalManageChar
-                    context="create"
+                    context="edit"
                     char={char}
                     triggerButton={
                         <Box
