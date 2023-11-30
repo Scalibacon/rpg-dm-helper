@@ -47,6 +47,10 @@ const appReducer = (state: AppState, action: AppReducerAction): AppState => {
             draft.chars[index] = payload.char
 
             saveStateInStorage(draft)
+        } else if (type === AppActionKind.REMOVE_CHAR) {
+            draft.chars = draft.chars.filter(char => char.id !== payload.char.id)
+
+            saveStateInStorage(draft)
         }
     })
 }

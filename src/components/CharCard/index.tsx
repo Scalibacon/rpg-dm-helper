@@ -1,7 +1,8 @@
 import { Char } from "@/types/Char.type"
 import { Box, Grid, GridItem, Image } from "@chakra-ui/react"
-import { Edit } from "iconsax-react"
+import { Edit, Trash } from "iconsax-react"
 import { ModalManageChar } from "../ModalManageChar"
+import { ModalDeleteChar } from "../DialogDeleteChar"
 
 interface CharCardProps {
     char: Char
@@ -64,6 +65,25 @@ const CharCard = ({
                 alignItems={'center'}
             >
                 {char.playerName}
+            </GridItem>
+            <GridItem
+                display={'flex'}
+                justifyContent={'flex-end'}
+            >
+                <ModalDeleteChar
+                    char={char}
+                    triggerButton={
+                        <Box
+                            cursor={'pointer'}
+                            transition={'opacity 0.2s ease'}
+                            _hover={{
+                                opacity: '0.7'
+                            }}
+                        >
+                            <Trash variant="TwoTone" />
+                        </Box>
+                    }
+                />
             </GridItem>
         </Grid>
     )
