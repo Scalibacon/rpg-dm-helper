@@ -1,4 +1,6 @@
+import { BattleMap } from "@/components/BattleMap"
 import { CharCard } from "@/components/CharCard"
+import { ImageInput } from "@/components/ImageInput"
 import { ModalManageChar } from "@/components/ModalManageChar"
 import { AppContext } from "@/contexts/AppContext"
 import {
@@ -11,9 +13,11 @@ import {
     Tabs,
     VStack,
 } from "@chakra-ui/react"
+import { Formik } from "formik"
 import { useContext } from "react"
+import { SceneManager } from "./scripts/SceneManager"
 
-const BattleMap = () => {
+const BattleMapPage = () => {
     const { appState } = useContext(AppContext)
 
     console.log(appState)
@@ -22,6 +26,7 @@ const BattleMap = () => {
             height='100vh'
             color='white'
         >
+            <BattleMap />
             <Flex
                 flexDirection={'column'}
                 height='100%'
@@ -36,7 +41,9 @@ const BattleMap = () => {
                         <Tab>Settings</Tab>
                         <Tab>Logs</Tab>
                     </TabList>
-                    <TabPanels>
+                    <TabPanels
+                        overflowX={'auto'}
+                    >
                         <TabPanel>
                             <VStack>
                                 <ModalManageChar
@@ -53,13 +60,29 @@ const BattleMap = () => {
 
                                 {appState.chars.map((char, index) => {
                                     return (
-                                        <CharCard key={index} char={char}/>
+                                        <CharCard key={index} char={char} />
                                     )
                                 })}
                             </VStack>
                         </TabPanel>
                         <TabPanel>
-                            <p>Settings!</p>
+                            <Formik
+                                initialValues={{
+                                    mapBackground: ''
+                                }}
+                                onSubmit={() => { return }}
+                            >
+                                {() => (
+                                    <ImageInput 
+                                        name='mapBackground' 
+                                        maxSize={false}
+                                        onImageLoad={(imageBase64) => {
+                                            SceneManager.battleMapScene.setBackgroundImage(imageBase64)
+                                        }}
+                                    />
+
+                                )}
+                            </Formik>
                         </TabPanel>
                         <TabPanel>
                             <p>Logs!</p>
@@ -71,4 +94,4 @@ const BattleMap = () => {
     )
 }
 
-export { BattleMap }
+export { BattleMapPage }

@@ -8,7 +8,8 @@ import { fileToBase64 } from '@/utils/fileUtils'
 interface ImageInputProps extends InputProps {
     label?: string
     name: string
-    maxSize?: number,
+    maxSize?: number | false,
+    onImageLoad?: (imageBase64: string) => void
 }
 
 const MAX_SIZE = 250 * 1000
@@ -19,6 +20,7 @@ const ImageInput = ({
     height = '100px',
     name,
     maxSize = MAX_SIZE,
+    onImageLoad,
     //   ...props
 }: ImageInputProps) => {
     const [imagePathes, setImagePathes] = useState<string[]>([])
@@ -26,7 +28,7 @@ const ImageInput = ({
     const toast = useToast()
 
     const loadFilePreview = useCallback(async (file: File) => {
-        if (file.size > MAX_SIZE) {
+        if (maxSize && file.size > MAX_SIZE) {
             toast({
                 title: `Error uploading image`,
                 description: `File exceeds max size (${maxSize} bytes)`,
@@ -48,11 +50,13 @@ const ImageInput = ({
                 setImagePathes([base64])
             }
 
+            if(onImageLoad) onImageLoad(base64)
+
         } catch (error) {
             if (error instanceof Error)
                 console.log('Error trying to show image: ', error.message)
         }
-    }, [field.value, fieldHelpers, multiple, maxSize, toast])
+    }, [field.value, fieldHelpers, multiple, maxSize, toast, onImageLoad])
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
         acceptedFiles.forEach(loadFilePreview)
