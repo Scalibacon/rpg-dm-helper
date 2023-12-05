@@ -16,20 +16,21 @@ export class Square extends Sprite {
         this.alpha = 0.2
     }
 
-    public static generateSquares(width = 50) {
+    public static generateSquares() {
+        const squareSize = SceneManager.squareSize
         console.log('generate')
         const squares: Square[] = []
 
-        const lengthX = Math.ceil(2500 / width)
-        const lengthY = Math.ceil(2500 / width)
+        const lengthX = Math.ceil(2500 / squareSize)
+        const lengthY = Math.ceil(2500 / squareSize)
 
         for (let i = 0; i < lengthX; i++) {
             for (let j = 0; j < lengthY; j++) {
                 const square = new Square()
-                square.width = width
-                square.height = width
-                square.x = i * width
-                square.y = j * width
+                square.width = squareSize
+                square.height = squareSize
+                square.x = i * squareSize
+                square.y = j * squareSize
                 square.zIndex = 10
                 squares.push(square)
             }

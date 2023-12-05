@@ -8,6 +8,7 @@ export class SceneManager {
     // public static currentScene: Scene
     public static battleMapScene: BattleMapScene
 
+    public static squareSize = 50
 
     private static _width: number
     private static _height: number

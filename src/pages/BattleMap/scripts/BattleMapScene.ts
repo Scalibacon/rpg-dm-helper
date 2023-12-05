@@ -3,16 +3,19 @@ import { Scene } from "./Scene";
 import { SceneManager } from "./SceneManager";
 import { BaseTexture, Sprite, Texture } from "pixi.js";
 import { Square } from "./Square";
+import { Char } from "@/types/Char.type";
+import { CharSprite } from "./CharSprite";
 
 export class BattleMapScene extends Scene {
     public viewport: Viewport
     public background?: Sprite
     public squares: Square[] = []
 
+    public charSprites: CharSprite[] = []
+
     constructor() {
         super()
         this.sortableChildren = true        
-        console.log('SceneManager.app.view.width', SceneManager.app.view.width)
 
         this.viewport = new Viewport({
             screenWidth: 3000 || SceneManager.app.view.width,
@@ -30,6 +33,7 @@ export class BattleMapScene extends Scene {
 
         this.addChild(this.viewport)
         this.squares = Square.generateSquares()
+        console.log('heree1', this.squares)
         this.squares.forEach(square => {
             this.viewport.addChild(square)
         })
@@ -47,5 +51,13 @@ export class BattleMapScene extends Scene {
         this.background.zIndex = 1
         // this.viewport.addChild(this.background)
         this.viewport.addChild(this.background)
+    }
+
+    public addCharToMap(char: Char){
+        console.log('addchar', char)
+        const charSprite = new CharSprite(char)
+
+        this.charSprites.push(charSprite)
+        this.viewport.addChild(charSprite)
     }
 }

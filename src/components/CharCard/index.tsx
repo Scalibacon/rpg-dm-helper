@@ -3,6 +3,7 @@ import { Box, Grid, GridItem, Image, Menu, MenuButton, MenuItem, MenuItemProps, 
 import { Edit, More, ProfileAdd, Trash } from "iconsax-react"
 import { ModalManageChar } from "../ModalManageChar"
 import { ModalDeleteChar } from "../DialogDeleteChar"
+import { SceneManager } from "@/pages/BattleMap/scripts/SceneManager"
 
 interface CharCardProps {
     char: Char
@@ -88,10 +89,12 @@ const CharCard = ({
                         <MenuItem
                             {...menuItemProps}
                             onClick={() => {
-
+                                SceneManager.battleMapScene.addCharToMap(char)
                             }}
                         >
-                            <ProfileAdd variant="TwoTone" />
+                            <ProfileAdd 
+                                variant="TwoTone"                                
+                            />
                             Add to map
                         </MenuItem>
                     </MenuList>
