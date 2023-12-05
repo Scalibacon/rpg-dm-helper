@@ -21,7 +21,7 @@ const ImageInput = ({
     name,
     maxSize = MAX_SIZE,
     onImageLoad,
-    //   ...props
+    ...props
 }: ImageInputProps) => {
     const [imagePathes, setImagePathes] = useState<string[]>([])
     const [field, meta, fieldHelpers] = useField<File[]>(name)
@@ -50,7 +50,7 @@ const ImageInput = ({
                 setImagePathes([base64])
             }
 
-            if(onImageLoad) onImageLoad(base64)
+            if (onImageLoad) onImageLoad(base64)
 
         } catch (error) {
             if (error instanceof Error)
@@ -79,7 +79,6 @@ const ImageInput = ({
         <FormControl
             {...getRootProps()}
             {...field}
-            w='500px'
         >
             {label && <FormLabel>{label}</FormLabel>}
             <Box
@@ -89,6 +88,9 @@ const ImageInput = ({
                 display='flex'
                 alignItems={'center'}
                 justifyContent='center'
+                padding={'12px'}
+                textAlign={'center'}
+                {...props}
             >
                 <input {...getInputProps()} id={name} name={name} />
                 {

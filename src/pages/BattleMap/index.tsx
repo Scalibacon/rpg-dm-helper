@@ -75,12 +75,13 @@ const BattleMapPage = () => {
                                 {() => (
                                     <ImageInput 
                                         name='mapBackground' 
+                                        label='Map Image'
                                         maxSize={false}
+                                        maxW={'300px'}
                                         onImageLoad={(imageBase64) => {
                                             SceneManager.battleMapScene.setBackgroundImage(imageBase64)
                                         }}
                                     />
-
                                 )}
                             </Formik>
                         </TabPanel>

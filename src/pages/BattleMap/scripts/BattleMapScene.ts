@@ -11,7 +11,7 @@ export class BattleMapScene extends Scene {
 
     constructor() {
         super()
-        this.sortableChildren = true
+        this.sortableChildren = true        
         console.log('SceneManager.app.view.width', SceneManager.app.view.width)
 
         this.viewport = new Viewport({
@@ -24,7 +24,7 @@ export class BattleMapScene extends Scene {
             .drag()
             .pinch()
             .wheel()
-            .bounce()
+            // .bounce()
         this.viewport.sortableChildren = true
         this.viewport.zIndex = 7
 
@@ -38,7 +38,7 @@ export class BattleMapScene extends Scene {
 
     public setBackgroundImage(image: string) {
         // if (this.background) this.viewport.removeChild(this.background)
-        if (this.background) this.removeChild(this.background)
+        if (this.background) this.viewport.removeChild(this.background)
 
 
         const base = new BaseTexture(image)
@@ -46,6 +46,6 @@ export class BattleMapScene extends Scene {
         this.background = new Sprite(texture)
         this.background.zIndex = 1
         // this.viewport.addChild(this.background)
-        this.addChild(this.background)
+        this.viewport.addChild(this.background)
     }
 }
