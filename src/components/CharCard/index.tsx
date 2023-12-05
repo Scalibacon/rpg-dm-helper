@@ -1,11 +1,22 @@
 import { Char } from "@/types/Char.type"
-import { Box, Grid, GridItem, Image } from "@chakra-ui/react"
-import { Edit, Trash } from "iconsax-react"
+import { Box, Grid, GridItem, Image, Menu, MenuButton, MenuItem, MenuItemProps, MenuList, Text } from "@chakra-ui/react"
+import { Edit, More, ProfileAdd, Trash } from "iconsax-react"
 import { ModalManageChar } from "../ModalManageChar"
 import { ModalDeleteChar } from "../DialogDeleteChar"
 
 interface CharCardProps {
     char: Char
+}
+
+const menuItemProps: MenuItemProps = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '2',
+    bg: 'gray.900',
+    color: 'white',
+    _hover: {
+        bg: 'gray.700'
+    }
 }
 
 const CharCard = ({
@@ -41,21 +52,50 @@ const CharCard = ({
                 display={'flex'}
                 justifyContent={'flex-end'}
             >
-                <ModalManageChar
-                    context="edit"
-                    char={char}
-                    triggerButton={
-                        <Box
-                            cursor={'pointer'}
-                            transition={'opacity 0.2s ease'}
-                            _hover={{
-                                opacity: '0.7'
+                <Menu>
+                    <MenuButton
+                        p='3px'
+                        transition='all 0.2s'
+                        borderRadius='100%'
+                        _hover={{ bg: 'gray.600' }}
+                        _expanded={{ bg: 'turquoise' }}
+                    >
+                        <More size="32" />
+                    </MenuButton>
+                    <MenuList
+                        bg='gray.900'
+                        border='solid 1px cyan'
+                    >
+                        <ModalManageChar
+                            context="edit"
+                            char={char}
+                            triggerButton={
+                                <MenuItem {...menuItemProps}>
+                                    <Edit variant="TwoTone" />
+                                    <Text>Edit card</Text>
+                                </MenuItem>
+                            }
+                        />
+                        <ModalDeleteChar
+                            char={char}
+                            triggerButton={
+                                <MenuItem {...menuItemProps}>
+                                    <Trash variant="TwoTone" />
+                                    <Text>Delete char</Text>
+                                </MenuItem>
+                            }
+                        />
+                        <MenuItem
+                            {...menuItemProps}
+                            onClick={() => {
+
                             }}
                         >
-                            <Edit variant="TwoTone" />
-                        </Box>
-                    }
-                />
+                            <ProfileAdd variant="TwoTone" />
+                            Add to map
+                        </MenuItem>
+                    </MenuList>
+                </Menu>
             </GridItem>
             <GridItem
                 whiteSpace='nowrap'
@@ -70,20 +110,6 @@ const CharCard = ({
                 display={'flex'}
                 justifyContent={'flex-end'}
             >
-                <ModalDeleteChar
-                    char={char}
-                    triggerButton={
-                        <Box
-                            cursor={'pointer'}
-                            transition={'opacity 0.2s ease'}
-                            _hover={{
-                                opacity: '0.7'
-                            }}
-                        >
-                            <Trash variant="TwoTone" />
-                        </Box>
-                    }
-                />
             </GridItem>
         </Grid>
     )
