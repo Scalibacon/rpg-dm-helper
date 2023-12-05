@@ -1,5 +1,5 @@
 import { Viewport } from "pixi-viewport";
-import { Application, settings, SCALE_MODES } from "pixi.js";
+import { Application, settings, SCALE_MODES, Sprite, Texture } from "pixi.js";
 import { BattleMapScene } from "./BattleMapScene";
 // import { Scene } from "../types/Scene";
 
@@ -20,6 +20,14 @@ export class SceneManager {
         return SceneManager._height;
     }
 
+    public static removeAll() {
+        for (let i = SceneManager.app.stage.children.length - 1; i >= 0; i--) {
+            SceneManager.app.stage.removeChild(
+                SceneManager.app.stage.children[i]
+            )
+        }
+    }
+
     public static initialize(width: number, height: number) {
         SceneManager._width = width
         SceneManager._height = height
@@ -35,9 +43,8 @@ export class SceneManager {
         })
 
         // should help with pixels being bluerred when scaling up/down
-        settings.ROUND_PIXELS = false;
-        settings.RESOLUTION = 1;
-        window.devicePixelRatio = 1;
+        settings.ROUND_PIXELS = false
+        settings.RESOLUTION = 1
         SceneManager.app.stage.sortableChildren = true
 
         // configure custom cursor

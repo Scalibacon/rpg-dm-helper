@@ -10,6 +10,10 @@ const BattleMap = () => {
             containerRef.current?.clientWidth || 500, 
             containerRef.current?.clientHeight || 100
         )
+
+        return () => {
+            SceneManager.removeAll()
+        }
     })
 
     return (

@@ -1,4 +1,5 @@
 import { Graphics, Sprite, Texture } from "pixi.js";
+import { SceneManager } from "./SceneManager";
 
 export class Square extends Sprite {
     constructor() {
@@ -19,8 +20,11 @@ export class Square extends Sprite {
         console.log('generate')
         const squares: Square[] = []
 
-        for (let i = 0; i < 20; i++) {
-            for (let j = 0; j < 20; j++) {
+        const lengthX = Math.ceil(2500 / width)
+        const lengthY = Math.ceil(2500 / width)
+
+        for (let i = 0; i < lengthX; i++) {
+            for (let j = 0; j < lengthY; j++) {
                 const square = new Square()
                 square.width = width
                 square.height = width

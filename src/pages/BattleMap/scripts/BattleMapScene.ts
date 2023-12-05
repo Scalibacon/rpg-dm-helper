@@ -12,12 +12,13 @@ export class BattleMapScene extends Scene {
     constructor() {
         super()
         this.sortableChildren = true
+        console.log('SceneManager.app.view.width', SceneManager.app.view.width)
 
         this.viewport = new Viewport({
-            screenWidth: SceneManager.app.view.width,
-            screenHeight: SceneManager.app.view.height,
-            worldWidth: 2000,
-            worldHeight: 1070,
+            screenWidth: 3000 || SceneManager.app.view.width,
+            screenHeight: 3000 || SceneManager.app.view.height,
+            worldWidth: 3000,
+            worldHeight: 3000,
             events: SceneManager.app.renderer.events
         })
             .drag()
