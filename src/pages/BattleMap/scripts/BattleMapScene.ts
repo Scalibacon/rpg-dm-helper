@@ -27,6 +27,8 @@ export class BattleMapScene extends Scene {
     }
 
     public set config(newConfig) {
+        console.log('this.squareContainer', this.squareContainer)
+        console.log('this.squares', this.squares)
         this._config = {
             ...this.config,
             ...newConfig,
@@ -34,6 +36,7 @@ export class BattleMapScene extends Scene {
 
         if(newConfig.squareSize){
             this.drawSquares()
+            this.updateCharSprites()
         }
 
         if(newConfig.mapBackground){
@@ -86,6 +89,7 @@ export class BattleMapScene extends Scene {
     }
 
     public drawSquares() {
+        console.log('called drawsquare')
         this.squareContainer.removeChildren()
 
         this.squares = Square.generateSquares()
@@ -95,8 +99,9 @@ export class BattleMapScene extends Scene {
     }
 
     public updateCharSprites() {
-        this.charSprites.forEach(_charSprite => {
-            //
+        this.charSprites.forEach(charSprite => {
+            charSprite.width = this.config.squareSize ?? 50
+            charSprite.height = this.config.squareSize ?? 50
         })
     }
 

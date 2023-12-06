@@ -10,8 +10,8 @@ export class CharSprite extends Sprite {
 
         this.characterName = char.characterName
 
-        this.width = SceneManager.squareSize
-        this.height = SceneManager.squareSize
+        this.width = SceneManager.battleMapScene.config.squareSize ?? 50
+        this.height = SceneManager.battleMapScene.config.squareSize ?? 50
 
         this.x = 0
         this.y = 0
