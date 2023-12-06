@@ -9,13 +9,16 @@ import { CharSprite } from "./CharSprite";
 export class BattleMapScene extends Scene {
     public viewport: Viewport
     public background?: Sprite
+
+    // [to-do] move all squares to container so we can change them all without loop
     public squares: Square[] = []
 
     public charSprites: CharSprite[] = []
 
     constructor() {
         super()
-        this.sortableChildren = true        
+
+        this.sortableChildren = true
 
         this.viewport = new Viewport({
             screenWidth: 3000 || SceneManager.app.view.width,
@@ -27,7 +30,7 @@ export class BattleMapScene extends Scene {
             .drag()
             .pinch()
             .wheel()
-            // .bounce()
+        // .bounce()
         this.viewport.sortableChildren = true
         this.viewport.zIndex = 7
 
@@ -53,7 +56,7 @@ export class BattleMapScene extends Scene {
         this.viewport.addChild(this.background)
     }
 
-    public addCharToMap(char: Char){
+    public addCharToMap(char: Char) {
         console.log('addchar', char)
         const charSprite = new CharSprite(char)
 

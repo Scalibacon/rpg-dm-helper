@@ -15,6 +15,15 @@ export class CharSprite extends Sprite {
 
         this.x = 0
         this.y = 0
+        this.zIndex = 10
+
+        this.eventMode = 'static'
+        this.cursor = 'pointer'
+        this.anchor.set(0.5)
+
+        this.on('pointerdown', () => {
+            SceneManager.onDragStart(this)
+        }, this)
 
         if(char.charImage){
             const base = new BaseTexture(char.charImage)

@@ -1,5 +1,5 @@
 import { Viewport } from "pixi-viewport";
-import { Application, settings, SCALE_MODES, Sprite, Texture } from "pixi.js";
+import { Application, settings, SCALE_MODES, Sprite, Texture, FederatedPointerEvent } from "pixi.js";
 import { BattleMapScene } from "./BattleMapScene";
 // import { Scene } from "../types/Scene";
 
@@ -7,6 +7,8 @@ export class SceneManager {
     public static app: Application
     // public static currentScene: Scene
     public static battleMapScene: BattleMapScene
+
+    public static dragTarget?: Sprite
 
     public static squareSize = 50
 
@@ -43,6 +45,13 @@ export class SceneManager {
             height: height,
         })
 
+        /* event */
+        SceneManager.app.stage.eventMode = 'static'
+        SceneManager.app.stage.hitArea = SceneManager.app.screen
+        SceneManager.app.stage.on('pointerup', SceneManager.onDragEnd);
+        SceneManager.app.stage.on('pointerupoutside', SceneManager.onDragEnd);
+        /*********/
+
         // should help with pixels being bluerred when scaling up/down
         settings.ROUND_PIXELS = false
         settings.RESOLUTION = 1
@@ -58,6 +67,33 @@ export class SceneManager {
 
         SceneManager.battleMapScene = new BattleMapScene()
         SceneManager.app.stage.addChild(SceneManager.battleMapScene)
+    }
+
+    public static onDragEnd() {
+        if (SceneManager.dragTarget) {
+            SceneManager.app.stage.off('pointermove', SceneManager.onDragMove)
+            SceneManager.dragTarget.alpha = 1
+            SceneManager.dragTarget = undefined
+        }
+
+        SceneManager.battleMapScene.viewport.pause = false
+    }
+
+    public static onDragMove(event: FederatedPointerEvent) {
+        if (SceneManager.dragTarget) {
+            SceneManager.dragTarget.parent.toLocal(
+                event.global,
+                undefined,
+                SceneManager.dragTarget.position
+            )
+        }
+    }
+
+    public static onDragStart(sprite: Sprite) {
+        sprite.alpha = 0.5
+        SceneManager.dragTarget = sprite
+        SceneManager.app.stage.on('pointermove', SceneManager.onDragMove)
+        SceneManager.battleMapScene.viewport.pause = true
     }
 
     // public static changeScene(newScene: Scene) {
