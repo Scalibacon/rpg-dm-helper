@@ -1,16 +1,56 @@
 import { Viewport } from "pixi-viewport";
 import { Scene } from "./Scene";
 import { SceneManager } from "./SceneManager";
-import { BaseTexture, Sprite, Texture } from "pixi.js";
+import { BaseTexture, Container, Sprite, Texture } from "pixi.js";
 import { Square } from "./Square";
 import { Char } from "@/types/Char.type";
 import { CharSprite } from "./CharSprite";
+import { MapConfig } from "@/types/MapConfig.type";
+
+export const initialConfig: MapConfig = {
+    mapBackground: '',
+    squareSize: 50,
+    paddingLeft: 0,
+    paddingTop: 0,
+}
 
 export class BattleMapScene extends Scene {
     public viewport: Viewport
     public background?: Sprite
 
-    // [to-do] move all squares to container so we can change them all without loop
+
+    /* config */
+    private _config: MapConfig = initialConfig
+
+    public get config(): MapConfig{
+        return this._config;
+    }
+
+    public set config(newConfig) {
+        this._config = {
+            ...this.config,
+            ...newConfig,
+        }
+
+        if(newConfig.squareSize){
+            this.drawSquares()
+        }
+
+        if(newConfig.mapBackground){
+            this.setBackgroundImage(newConfig.mapBackground)
+        }
+
+        if(newConfig.paddingLeft && this.background){
+            this.background.x = newConfig.paddingLeft
+        }
+
+        if(newConfig.paddingTop && this.background){
+            this.background.y = newConfig.paddingTop
+        }
+    }
+    /**********/
+
+    public squareContainer: Container
     public squares: Square[] = []
 
     public charSprites: CharSprite[] = []
@@ -35,29 +75,45 @@ export class BattleMapScene extends Scene {
         this.viewport.zIndex = 7
 
         this.addChild(this.viewport)
-        this.squares = Square.generateSquares()
-        console.log('heree1', this.squares)
-        this.squares.forEach(square => {
-            this.viewport.addChild(square)
-        })
+
+        this.squareContainer = new Container()
+        this.squareContainer.zIndex = 10
+
+        this.viewport.addChild(this.squareContainer)
+
+        this.drawSquares()
         // this.setBackgroundImage('')
+    }
+
+    public drawSquares() {
+        this.squareContainer.removeChildren()
+
+        this.squares = Square.generateSquares()
+        this.squares.forEach(square => {
+            this.squareContainer.addChild(square)
+        })
+    }
+
+    public updateCharSprites() {
+        this.charSprites.forEach(_charSprite => {
+            //
+        })
     }
 
     public setBackgroundImage(image: string) {
         // if (this.background) this.viewport.removeChild(this.background)
         if (this.background) this.viewport.removeChild(this.background)
 
-
         const base = new BaseTexture(image)
         const texture = new Texture(base)
         this.background = new Sprite(texture)
         this.background.zIndex = 1
-        // this.viewport.addChild(this.background)
+        this.background.x = this.config.paddingLeft ?? 0
+        this.background.y = this.config.paddingTop ?? 0
         this.viewport.addChild(this.background)
     }
 
     public addCharToMap(char: Char) {
-        console.log('addchar', char)
         const charSprite = new CharSprite(char)
 
         this.charSprites.push(charSprite)

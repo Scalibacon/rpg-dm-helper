@@ -16,6 +16,8 @@ import {
 import { Formik } from "formik"
 import { useContext } from "react"
 import { SceneManager } from "./scripts/SceneManager"
+import TextInput from "@/components/TextInput"
+import { initialConfig } from "./scripts/BattleMapScene"
 
 const BattleMapPage = () => {
     const { appState } = useContext(AppContext)
@@ -67,21 +69,53 @@ const BattleMapPage = () => {
                         </TabPanel>
                         <TabPanel>
                             <Formik
-                                initialValues={{
-                                    mapBackground: ''
-                                }}
-                                onSubmit={() => { return }}
+                                initialValues={initialConfig}
+                                onSubmit={(_values) => { return }}
                             >
                                 {() => (
-                                    <ImageInput 
-                                        name='mapBackground' 
-                                        label='Map Image'
-                                        maxSize={false}
-                                        maxW={'300px'}
-                                        onImageLoad={(imageBase64) => {
-                                            SceneManager.battleMapScene.setBackgroundImage(imageBase64)
-                                        }}
-                                    />
+                                    <>
+                                        <ImageInput
+                                            name='mapBackground'
+                                            label='Map Image'
+                                            maxSize={false}
+                                            maxW={'300px'}
+                                            onImageLoad={(imageBase64) => {
+                                                SceneManager.battleMapScene.config = {
+                                                    mapBackground: imageBase64,
+                                                }
+                                            }}
+                                        />
+                                        <TextInput
+                                            name='squareSize'
+                                            label='Square size'
+                                            type="number"
+                                            onBlur={(event: React.FocusEvent<HTMLInputElement>) => {
+                                                SceneManager.battleMapScene.config = {
+                                                    squareSize: Number(event.target.value || 50),
+                                                }
+                                            }}
+                                        />
+                                        <TextInput
+                                            name='paddingTop'
+                                            label='Padding top'
+                                            type="number"
+                                            onBlur={(event: React.FocusEvent<HTMLInputElement>) => {
+                                                SceneManager.battleMapScene.config = {
+                                                    paddingTop: Number(event.target.value || 0),
+                                                }
+                                            }}
+                                        />
+                                        <TextInput
+                                            name='paddingLeft'
+                                            label='Padding left'
+                                            type="number"
+                                            onBlur={(event: React.FocusEvent<HTMLInputElement>) => {
+                                                SceneManager.battleMapScene.config = {
+                                                    paddingLeft: Number(event.target.value || 0),
+                                                }
+                                            }}
+                                        />
+                                    </>
                                 )}
                             </Formik>
                         </TabPanel>

@@ -19,7 +19,6 @@ const TextInput = ({
     label,
     isRequired,
     variant = 'flushed',
-    type,
     name,
     shouldDisable,
     shouldReadOnly,

@@ -1,5 +1,4 @@
-import { Viewport } from "pixi-viewport";
-import { Application, settings, SCALE_MODES, Sprite, Texture, FederatedPointerEvent } from "pixi.js";
+import { Application, settings, Sprite, FederatedPointerEvent } from "pixi.js";
 import { BattleMapScene } from "./BattleMapScene";
 // import { Scene } from "../types/Scene";
 
@@ -8,19 +7,17 @@ export class SceneManager {
     // public static currentScene: Scene
     public static battleMapScene: BattleMapScene
 
-    public static dragTarget?: Sprite
-
-    public static squareSize = 50
+    public static dragTarget?: Sprite   
 
     private static _width: number
     private static _height: number
 
     public static get width(): number {
-        return SceneManager._width;
+        return SceneManager._width
     }
 
     public static get height(): number {
-        return SceneManager._height;
+        return SceneManager._height
     }
 
     public static removeAll() {

@@ -17,7 +17,7 @@ export class Square extends Sprite {
     }
 
     public static generateSquares() {
-        const squareSize = SceneManager.squareSize
+        const squareSize = SceneManager.battleMapScene?.config.squareSize ?? 50
         console.log('generate')
         const squares: Square[] = []
 
@@ -31,7 +31,6 @@ export class Square extends Sprite {
                 square.height = squareSize
                 square.x = i * squareSize
                 square.y = j * squareSize
-                square.zIndex = 10
                 squares.push(square)
             }
         }
