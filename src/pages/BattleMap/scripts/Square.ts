@@ -12,8 +12,6 @@ export class Square extends Sprite {
 
         loaderBarBorder.drawRect(0, 0, this.width, this.height)
         this.addChild(loaderBarBorder)
-
-        this.alpha = 0.2
     }
 
     public static generateSquares() {

@@ -12,12 +12,12 @@ export const initialConfig: MapConfig = {
     squareSize: 50,
     paddingLeft: 0,
     paddingTop: 0,
+    squareOpacity: 0.2,
 }
 
 export class BattleMapScene extends Scene {
     public viewport: Viewport
     public background?: Sprite
-
 
     /* config */
     private _config: MapConfig = initialConfig
@@ -50,10 +50,14 @@ export class BattleMapScene extends Scene {
         if(newConfig.paddingTop && this.background){
             this.background.y = newConfig.paddingTop
         }
+
+        if(newConfig.squareOpacity){
+            this.squareContainer.alpha = newConfig.squareOpacity ?? 0.2
+        }
     }
     /**********/
 
-    public squareContainer: Container
+    public squareContainer: Container = new Container()
     public squares: Square[] = []
 
     public charSprites: CharSprite[] = []
@@ -78,19 +82,23 @@ export class BattleMapScene extends Scene {
         this.viewport.zIndex = 7
 
         this.addChild(this.viewport)
-
-        this.squareContainer = new Container()
-        this.squareContainer.zIndex = 10
-
-        this.viewport.addChild(this.squareContainer)
+        this.drawSquareContainer()        
 
         this.drawSquares()
         // this.setBackgroundImage('')
     }
 
+    public drawSquareContainer(){
+        this.squareContainer = new Container()
+        this.squareContainer.zIndex = 10
+        this.squareContainer.alpha = SceneManager.battleMapScene?.config.squareOpacity ?? 0.2
+        this.viewport.addChild(this.squareContainer)
+    }
+
     public drawSquares() {
         console.log('called drawsquare')
-        this.squareContainer.removeChildren()
+        this.squareContainer.destroy(true)
+        this.drawSquareContainer()
 
         this.squares = Square.generateSquares()
         this.squares.forEach(square => {

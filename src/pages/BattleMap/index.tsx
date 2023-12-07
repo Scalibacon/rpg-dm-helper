@@ -115,6 +115,16 @@ const BattleMapPage = () => {
                                                 }
                                             }}
                                         />
+                                        <TextInput
+                                            name='squareOpacity'
+                                            label='Square opacity'
+                                            type="number"
+                                            onBlur={(event: React.FocusEvent<HTMLInputElement>) => {
+                                                SceneManager.battleMapScene.config = {
+                                                    squareOpacity: Number(event.target.value || 0),
+                                                }
+                                            }}
+                                        />
                                     </>
                                 )}
                             </Formik>

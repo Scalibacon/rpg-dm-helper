@@ -3,4 +3,5 @@ export type MapConfig = {
     squareSize?: number
     paddingTop?: number
     paddingLeft?: number
+    squareOpacity?: number
 }
