@@ -22,7 +22,7 @@ export class BattleMapScene extends Scene {
     /* config */
     private _config: MapConfig = initialConfig
 
-    public get config(): MapConfig{
+    public get config(): MapConfig {
         return this._config;
     }
 
@@ -34,24 +34,24 @@ export class BattleMapScene extends Scene {
             ...newConfig,
         }
 
-        if(newConfig.squareSize){
+        if (newConfig.squareSize) {
             this.drawSquares()
-            this.updateCharSprites()
+            this.drawChars()
         }
 
-        if(newConfig.mapBackground){
+        if (newConfig.mapBackground) {
             this.setBackgroundImage(newConfig.mapBackground)
         }
 
-        if(newConfig.paddingLeft && this.background){
+        if (newConfig.paddingLeft && this.background) {
             this.background.x = newConfig.paddingLeft
         }
 
-        if(newConfig.paddingTop && this.background){
+        if (newConfig.paddingTop && this.background) {
             this.background.y = newConfig.paddingTop
         }
 
-        if(newConfig.squareOpacity){
+        if (newConfig.squareOpacity) {
             this.squareContainer.alpha = newConfig.squareOpacity ?? 0.2
         }
     }
@@ -60,7 +60,8 @@ export class BattleMapScene extends Scene {
     public squareContainer: Container = new Container()
     public squares: Square[] = []
 
-    public charSprites: CharSprite[] = []
+    public charContainer: Container = new Container()
+    public chars: Char[] = []
 
     constructor() {
         super()
@@ -79,16 +80,17 @@ export class BattleMapScene extends Scene {
             .wheel()
         // .bounce()
         this.viewport.sortableChildren = true
-        this.viewport.zIndex = 7
+        this.viewport.zIndex = 15
 
         this.addChild(this.viewport)
-        this.drawSquareContainer()        
-
+        this.drawSquareContainer()
         this.drawSquares()
+
+
         // this.setBackgroundImage('')
     }
 
-    public drawSquareContainer(){
+    public drawSquareContainer() {
         this.squareContainer = new Container()
         this.squareContainer.zIndex = 10
         this.squareContainer.alpha = SceneManager.battleMapScene?.config.squareOpacity ?? 0.2
@@ -106,10 +108,22 @@ export class BattleMapScene extends Scene {
         })
     }
 
-    public updateCharSprites() {
-        this.charSprites.forEach(charSprite => {
-            charSprite.width = this.config.squareSize ?? 50
-            charSprite.height = this.config.squareSize ?? 50
+    public drawChars() {
+        const prevCoordinates = this.charContainer.children.map(charSprite => {
+            return { x: charSprite.x, y: charSprite.y }
+        })
+
+        if (this.charContainer) this.charContainer.destroy(true)
+
+        this.charContainer = new Container()
+        this.charContainer.zIndex = 10
+        this.viewport.addChild(this.charContainer)
+
+        this.chars.forEach((char, index) => {
+            const charSprite = new CharSprite(char)
+            charSprite.x = prevCoordinates[index]?.x || 0
+            charSprite.y = prevCoordinates[index]?.y || 0
+            this.charContainer.addChild(charSprite)
         })
     }
 
@@ -127,9 +141,7 @@ export class BattleMapScene extends Scene {
     }
 
     public addCharToMap(char: Char) {
-        const charSprite = new CharSprite(char)
-
-        this.charSprites.push(charSprite)
-        this.viewport.addChild(charSprite)
+        this.chars.push(char)
+        this.drawChars()
     }
 }

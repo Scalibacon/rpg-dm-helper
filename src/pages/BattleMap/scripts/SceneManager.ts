@@ -1,4 +1,4 @@
-import { Application, settings, Sprite, FederatedPointerEvent } from "pixi.js";
+import { Application, settings, Sprite, FederatedPointerEvent, DisplayObject } from "pixi.js";
 import { BattleMapScene } from "./BattleMapScene";
 // import { Scene } from "../types/Scene";
 
@@ -7,7 +7,7 @@ export class SceneManager {
     // public static currentScene: Scene
     public static battleMapScene: BattleMapScene
 
-    public static dragTarget?: Sprite   
+    public static dragTarget?: DisplayObject   
 
     private static _width: number
     private static _height: number
@@ -86,7 +86,7 @@ export class SceneManager {
         }
     }
 
-    public static onDragStart(sprite: Sprite) {
+    public static onDragStart(sprite: DisplayObject) {
         sprite.alpha = 0.5
         SceneManager.dragTarget = sprite
         SceneManager.app.stage.on('pointermove', SceneManager.onDragMove)
